@@ -46,6 +46,8 @@ def preprocess_function(train):
 
 	return preprocessing_fn
 
+# Helper function to write u_net prediction to an image
+
 def preds_to_img(pred, actual_img, fname):
 
 	scale = 255.
@@ -59,13 +61,16 @@ def preds_to_img(pred, actual_img, fname):
 
 	cv2.imwrite(os.path.join(FilePaths.fnResults, "{}_result.jpg".format(fname)), pred)
 
+
 def main():
 	print("Inside main")
-	"main function"
+	
 	# optional command line args
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--train", help="train the NN", action="store_true")
+
 	#parser.add_argument("--validate", help="validate the NN", action="store_true")
+	
 	parser.add_argument("--predict",nargs=1)
 	args = parser.parse_args()
 

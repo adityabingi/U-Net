@@ -25,10 +25,7 @@ def batch_norm(inputs, training, data_format):
 
 def conv_layer(inputs, filters, kernel_size, strides, data_format, activation=None):
 
-	"""
-	convolutional layer
-
-	"""
+	"""convolutional layer"""
 
 	return tf.layers.conv2d(
 	  inputs  = inputs, filters=filters, kernel_size=kernel_size, strides=strides,
@@ -41,9 +38,7 @@ def conv_layer(inputs, filters, kernel_size, strides, data_format, activation=No
 
 def conv_block(inputs, filters, training, data_format):
 
-	"""
-		conv_block for both encoder and decoder
-	"""
+	"""conv_block for both encoder and decoder"""
 
 	inputs = conv_layer(inputs,filters=filters, kernel_size = 3, strides=(1,1), data_format=data_format)
 
@@ -60,18 +55,14 @@ def conv_block(inputs, filters, training, data_format):
 	return inputs
 
 def downsample(inputs, data_format):
-	"""
 
-
-	"""
+	""" downsampling (maxpooling) layer for encoder"""
 	return tf.layers.max_pooling2d(inputs, pool_size = 2, strides = (2,2), padding='valid',
     data_format=data_format)
 
 def upsample(inputs, filters, data_format):
 
-	"""
-
-	"""
+	""" upsampling (convolution transpose) layer for decoder"""
 
 	return tf.layers.conv2d_transpose(inputs, filters, 2,
     strides = (2,2),
@@ -82,6 +73,8 @@ def upsample(inputs, filters, data_format):
 
 def encoder_block(inputs, filters, training, data_format):
 
+	""" single encoder block"""
+
 	encoder = conv_block(inputs, filters, training, data_format)
 
 	encoder_pool = downsample(encoder, data_format)
@@ -90,6 +83,8 @@ def encoder_block(inputs, filters, training, data_format):
 
 
 def decoder_block(inputs, concat_tensor, filters, training, data_format):
+
+	""" single decoder block"""
 
 	decoder = upsample(inputs, filters, data_format)
 
@@ -104,7 +99,7 @@ def decoder_block(inputs, concat_tensor, filters, training, data_format):
 	return decoder
 
 
-
+# class for U_net model
 class Model:
 
 	"minimalistic model for U-Net"
@@ -112,8 +107,10 @@ class Model:
 	def __init__(self, val_dataset, train_dataset=None, mustRestore = False, prefetch_batch_buffer=1, data_format = 'channels_last'):
 		self.mustRestore = mustRestore
 		self.data_format = data_format
+
 		if(train_dataset):
 			self.train_dataset = train_dataset.prefetch(prefetch_batch_buffer)
+
 		self.val_dataset = val_dataset.prefetch(prefetch_batch_buffer)
 		
 		self.training  = tf.placeholder(tf.bool, shape=[])
@@ -159,6 +156,7 @@ class Model:
 		#tf.summary.scalar('accuarcy', self.accuracy)
 
 		self.learningRate = tf.placeholder(tf.float32, shape=[])
+
 		update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
 		with tf.control_dependencies(update_ops):
 			self.optimizer = tf.train.AdamOptimizer(self.learningRate).minimize(self.loss)
@@ -166,6 +164,7 @@ class Model:
 		self.merged = tf.summary.merge_all()
 
 		(self.sess, self.saver) = self.setupTF()
+
 		self.train_writer = tf.summary.FileWriter(_SUMMARIES_DIR + '/train',
                                       self.sess.graph)
 		self.test_writer = tf.summary.FileWriter(_SUMMARIES_DIR + '/test')
@@ -173,6 +172,8 @@ class Model:
 
 
 	def u_net_graph(self, inputs):
+
+		""" tf graph for U_Net"""
 
 
 		with tf.variable_scope('U_net_model'):
@@ -248,6 +249,9 @@ class Model:
 
 	def loss_function(self):
 
+		""" dice loss function and combined dice & binary cross entropy loss function;
+		    any one of them can be used"""
+
 
 		def dice_coeff(y_true, y_pred):
 			smooth = 1.
@@ -272,9 +276,8 @@ class Model:
 
 	def setupTF(self):
 
-		"initialize TF"
-		#print('Python: '+sys.version)
-		#print('Tensorflow: '+tf.__version__)
+		"""initialize TF"""
+		
 		config = tf.ConfigProto()
 		config.gpu_options.allow_growth = True
 		sess=tf.Session(config = config) # TF session
@@ -299,6 +302,8 @@ class Model:
 
 
 	def train(self, train_batches_per_epoch, no_of_val_batches, FilePaths):
+
+		""" training loop for model"""
 
 		epoch = 0
 		best_error_rate = float('inf')
@@ -404,6 +409,8 @@ class Model:
 
 	def infer(self):
 
+		""" inference function for single image"""
+
 		validation_handle = self.sess.run(self.validation_iterator.string_handle())
 		self.sess.run(self.validation_iterator.initializer)
 		while True:
@@ -422,7 +429,7 @@ class Model:
 		return np.array(preds[0])
 
 	def save(self):
-		"save model to file"
+		"""save model to file"""
 		self.snapID += 1
 		self.saver.save(self.sess, '../model/snapshot', global_step=self.snapID)
 
