@@ -1,12 +1,15 @@
 # U-Net
+
 Implementation of U-Net for semantic segmentation in Tensorflow low level api using tf.data pipeline.
 
 # Data
+
 Kaggle's `carvana-image-masking-challenge` dataset is used to perform segmentaion 
 
 /train/ dataset of kaggle is split into 4070 training images and 1018 validation images
 
 ## Pre-processing
+
 All the images are resized into 512x512 resolution.
 
 Data transformations such as translation, horizontal flip are used on training data to improve generalization
@@ -22,7 +25,7 @@ Although there are advanced architectures like deeplabv3 for semantic segmentati
 
 For this project, I modified U-Net architecture by introducing batch normalization layers and using padded convolutions so that there is no loss of border pixels..results in a symmetric enoder-decoder architecture
 
-Modified Conv Block: [Conv(3X3)|BN|ReLu|Conv(3X3)|BN|ReLu]
+Modified Conv Block: [ Conv(3X3) | BN | ReLu | Conv(3X3) | BN | ReLu ]
 
 Dice loss is used as the loss function 
 
@@ -30,10 +33,15 @@ Model Definitions can be found in src/Model.py
 
 # Usage
 
-## For training
-
- From src directory run main.py. Place all training data in data folder
+ For training:
+ 
+ From src directory run main.py
+ 
+ Place all training data in data folder
+ 
 `python main.py --train`
+
+ For inference:
 
  For inference of single image
 `python main.py --predict`
@@ -52,4 +60,5 @@ Below are the inferences on test images of carvana-dataset
 |![test_img1](results/test_imgs/25d4634d84e0_14.jpg) |    ![test_pred1](results/test_preds/25d4634d84e0_14_result.jpg)  |
 |![test_img2](results/test_imgs/f9aa14f7d2d4_11.jpg) |    ![test_pred2](results/test_preds/f9aa14f7d2d4_11_result.jpg)  |
 |![test_img3](results/test_imgs/a5b572f6fbc8_15.jpg) |    ![test_pred3](results/test_preds/a5b572f6fbc8_15_result.jpg)  |
+|![test_img4](results/test_imgs/cddbd781eb15_05.jpg) |    ![test_pred4](results/test_preds/cddbd781eb15_05_result.jpg)  |
 
