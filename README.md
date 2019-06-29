@@ -41,7 +41,7 @@ Model Definitions can be found in src/Model.py
 
  For inference of single image:
  
-`python main.py --predict`
+`python main.py --predict <img_path>`
 
 
 # Results
