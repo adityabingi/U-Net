@@ -37,14 +37,11 @@ Model Definitions can be found in src/Model.py
  
  From src directory run main.py
  
- Place all training data in data folder
- 
 `python main.py --train`
 
- For inference:
-
- For inference of single image
-`python main.py --predict`
+ For inference of single image:
+ 
+`python main.py --predict <img_path>`
 
 
 # Results
