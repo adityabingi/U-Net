@@ -131,7 +131,7 @@ class Model:
 			self.optimizer = tf.train.AdamOptimizer(self.learningRate).minimize(self.loss)
 		self.merged = tf.summary.merge_all()
 		(self.sess, self.saver) = self.setupTF()
-		self.train_writer = tf.summary.FileWriter(_SUMMARIES_DIR + '/train',                                      self.sess.graph)
+		self.train_writer = tf.summary.FileWriter(_SUMMARIES_DIR + '/train',self.sess.graph)
 		self.test_writer = tf.summary.FileWriter(_SUMMARIES_DIR + '/test')
 
 
