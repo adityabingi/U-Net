@@ -33,16 +33,10 @@ Model Definitions can be found in src/Model.py
 
 # Usage
 
- For training:
- 
- From src directory run main.py
- 
-`python main.py --train`
+From src directory run main.py 
 
- For inference of single image:
- 
-`python main.py --predict <img_path>`
-
+For training `python main.py --train`  
+For inference of single image `python main.py --predict <img_path>`
 
 # Results
 
